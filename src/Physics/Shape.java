@@ -19,7 +19,12 @@ public abstract class Shape {
     public abstract void moveCenter(Point delta);
     public abstract void paint(Graphics g);
     public abstract void rotate(double degrees);
-    public abstract Point intersect(Shape s);
+
+    /*
+    Gets the point of intersection between 2 bodies, located on the "Parent" object
+    The parent object is the one the method is called from, the child is passed through the parameter
+     */
+    public abstract Point intersect(Shape s);// Get point of intersection between 2 bodies
 
     public CollisionManifold collide(Shape s){
         double dist = new Vector(this.getCenter(),s.getCenter()).getMagnitude();
@@ -159,7 +164,7 @@ public abstract class Shape {
     }
 
     public double getAngularMomentum(Point p){
-        Double d = new Vector(this.getCenter(),p).getMagnitude();
+        double d = new Vector(this.getCenter(),p).getMagnitude();
         return this.rpm*this.getMass()*d*d;
     }
 

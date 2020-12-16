@@ -53,11 +53,16 @@ public class Polygon extends Shape {
                 if (closestPoint == null)
                     closestPoint = p;
                 else{
-                    if (new Vector(s.getCenter(),p).getMagnitude() < new Vector(s.getCenter(),closestPoint).getMagnitude())
+                    /*
+                    Seing if the collision point on the other object is the closest,
+                    or if it's a different part of the line
+                     */
+                    double closestDist = new Vector(s.getCenter(),closestPoint).getMagnitude();
+                    if (new Vector(s.getCenter(),p).getMagnitude() < closestDist)
                         closestPoint = p;
-                    if (new Vector(s.getCenter(),L.getPointA()).getMagnitude() < new Vector(s.getCenter(),closestPoint).getMagnitude())
+                    if (new Vector(s.getCenter(),L.getPointA()).getMagnitude() < closestDist)
                         closestPoint = L.getPointA();
-                    if (new Vector(s.getCenter(),L.getPointB()).getMagnitude() < new Vector(s.getCenter(),closestPoint).getMagnitude())
+                    if (new Vector(s.getCenter(),L.getPointB()).getMagnitude() < closestDist)
                         closestPoint = L.getPointB();
                 }
             }
@@ -71,6 +76,7 @@ public class Polygon extends Shape {
         double x = 0;
         double y = 0;
 
+        //Calculates the average position of all the points in this Shape
         for (Line L:lines){
             x += L.getPointA().getX();
             y += L.getPointA().getY();
@@ -105,7 +111,12 @@ public class Polygon extends Shape {
         Vector v;
         Point center = this.getCenter();
         rot += angle;
-        rot = rot - (rot*((int)rot/360));
+        rot = rot - (rot*((int)rot/360)); //Making sure the rotation is less than 360
+
+        /*
+        Only point A is edited, as it refers to the Start of one line, and the end of the other, meaning
+        all points are affected this way
+         */
         for(int i = 0; i<lines.length;i++){
             Line l = lines[i];
             v = new Vector(OGCenter.clone(), OGlines[i].getPointA().clone());

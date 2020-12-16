@@ -9,7 +9,7 @@ public class Main {
     public static Window window;
     public static LinkedList<Shape> shapes = new LinkedList<>();
     public static double step = 0.000001;
-    public static double fps = 50000;
+    public static double fps = 100;
     
 
     public static void main(String[] args) throws InterruptedException {
@@ -19,78 +19,78 @@ public class Main {
         Circle c = new Circle(10, new Point(0,50));
         c.setHasGravity(false);
         shapes.add(c);
-        //c.setMass(r.nextDouble()*0.2+0.9);
+        c.setMass(r.nextDouble()*0.2+0.9);
 
         c = new Circle(10, new Point(22,50));
         c.setHasGravity(false);
         shapes.add(c);
-        //c.setMass(r.nextDouble()*0.2+0.9);
+        c.setMass(r.nextDouble()*0.2+0.9);
 
         c = new Circle(10, new Point(-22,50));
         c.setHasGravity(false);
         shapes.add(c);
-        //c.setMass(r.nextDouble()*0.2+0.9);
+        c.setMass(r.nextDouble()*0.2+0.9);
 
         c = new Circle(10, new Point(44,50));
         c.setHasGravity(false);
         shapes.add(c);
-        //c.setMass(r.nextDouble()*0.2+0.9);
+        c.setMass(r.nextDouble()*0.2+0.9);
 
         c = new Circle(10, new Point(-44,50));
         c.setHasGravity(false);
         shapes.add(c);
-        //c.setMass(r.nextDouble()*0.2+0.9);
+        c.setMass(r.nextDouble()*0.2+0.9);
 
         c = new Circle(10, new Point(11,28));
         c.setHasGravity(false);
         shapes.add(c);
-        //c.setMass(r.nextDouble()*0.2+0.9);
+        c.setMass(r.nextDouble()*0.2+0.9);
 
         c = new Circle(10, new Point(-11,28));
         c.setHasGravity(false);
         shapes.add(c);
-        //c.setMass(r.nextDouble()*0.2+0.9);
+        c.setMass(r.nextDouble()*0.2+0.9);
 
         c = new Circle(10, new Point(33,28));
         c.setHasGravity(false);
         shapes.add(c);
-        //c.setMass(r.nextDouble()*0.2+0.9);
+        c.setMass(r.nextDouble()*0.2+0.9);
 
         c = new Circle(10, new Point(-33,28));
         c.setHasGravity(false);
         shapes.add(c);
-        //c.setMass(r.nextDouble()*0.2+0.9);
+        c.setMass(r.nextDouble()*0.2+0.9);
 
         c = new Circle(10, new Point(0,6));
         c.setHasGravity(false);
         shapes.add(c);
-        //c.setMass(r.nextDouble()*0.2+0.9);
+        c.setMass(r.nextDouble()*0.2+0.9);
 
         c = new Circle(10, new Point(22,6));
         c.setHasGravity(false);
         shapes.add(c);
-        //c.setMass(r.nextDouble()*0.2+0.9);
+        c.setMass(r.nextDouble()*0.2+0.9);
 
         c = new Circle(10, new Point(-22,6));
         c.setHasGravity(false);
         shapes.add(c);
-        //c.setMass(r.nextDouble()*0.2+0.9);
+        c.setMass(r.nextDouble()*0.2+0.9);
 
         c = new Circle(10, new Point(11,-16));
         c.setHasGravity(false);
         shapes.add(c);
-        //c.setMass(r.nextDouble()*0.2+0.9);
+        c.setMass(r.nextDouble()*0.2+0.9);
 
         c = new Circle(10, new Point(-11,-16));
         c.setHasGravity(false);
         shapes.add(c);
-        //c.setMass(r.nextDouble()*0.2+0.9);
+        c.setMass(r.nextDouble()*0.2+0.9);
 
         c = new Circle(10, new Point(30,-110));
         c.setHasGravity(false);
         //shapes.add(c);
         c.setMass(1);
-        //c.setRpm(5);
+        c.setRpm(5);
         Polygon p = new Polygon(new Point[]{
                 new Point(0,100),
                 new Point(-50,0),
@@ -101,7 +101,7 @@ public class Main {
         p.rotate(50);
         shapes.add(p);
         p.setMass(10);
-        p.setRpm(-80);
+        p.setRpm(-90);
         p.addAcceleration(new Vector(90, 10000));
 
         while (true){

@@ -1,6 +1,7 @@
 package Physics;
 
 import Main.Main;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 
@@ -18,12 +19,15 @@ public class Circle extends Shape {
         return this;
     }
 
-    public Point collide(Circle s) {
-        Vector v = new Vector(this.center.clone(),s.center.clone());
+    public Point collide(@NotNull Circle s) {
+        Vector v = new Vector(this.center.clone(),s.center.clone()); //Get direction vector
+
+        //Get point of collision on this circle
         double x = this.center.getX()+Math.cos(Math.toRadians(v.getAngle()))*this.radius;
-        Point p = new Point(x,this.center.getY() + Math.sin(Math.toRadians(v.getAngle()))*this.radius);
-        return p;
+        return new Point(x,this.center.getY() + Math.sin(Math.toRadians(v.getAngle()))*this.radius);
     }
+
+
     public Point intersect(Shape s) {
         if (s instanceof Circle)
             return this.collide((Circle)s);
