@@ -4,7 +4,6 @@ import java.awt.*;
 import java.util.LinkedList;
 
 public class Polygon extends Shape {
-    double rot = 0;
     private Line[] lines;
     private Line[] OGlines;
     private Point OGCenter;

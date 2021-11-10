@@ -8,13 +8,24 @@ import java.util.Random;
 public class Main {
     public static Window window;
     public static LinkedList<Shape> shapes = new LinkedList<>();
-    public static double step = 0.000001;
+    public static double step = 0.00001;
     public static double fps = 100;
     
 
     public static void main(String[] args) throws InterruptedException {
         window = new Window();
         Random r = new Random();
+
+//        Circle c = new Circle(50, new Point(-70,0));
+//        shapes.add(c);
+//        c.setHasGravity(false);
+//        c.setMass(10);
+//        c = new Circle(50, new Point(70,0));
+//        shapes.add(c);
+//        c.setHasGravity(false);
+//        c.setMass(10);
+//        c.setRpm(1000);
+//        c.addAcceleration(new Vector(180, 10000));
 
         Circle c = new Circle(10, new Point(0,50));
         c.setHasGravity(false);

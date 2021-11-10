@@ -5,6 +5,7 @@ import Main.Main;
 import java.awt.*;
 
 public abstract class Shape {
+    double rot = 0;
     private double mass = 1;
     private Vector velocity = new Vector(0,0);
     private double rpm = 0;
@@ -41,28 +42,14 @@ public abstract class Shape {
             double depth = v.getMagnitude();
             Vector collNormal;
 
-            double hor = (v.getH()-relV.getH());
-            double vert = (v.getV()-relV.getV());
+            double hor = (v.getH()/relV.getH());
+            double vert = (v.getV()/relV.getV());
             double angle = Math.toDegrees(Math.atan2(vert,hor));
             collNormal = new Vector(angle,(1/ Main.step)*depth);
             return new CollisionManifold(p1,depth,collNormal);
         }
         else
             return null;
-    }
-
-    public void addForce(Vector acceleration, double mass){
-        Vector a = acceleration.clone();
-        a.setMagnitude(acceleration.getMagnitude()*(mass/this.getMass()));
-        addAcceleration(a);
-    }
-
-    public void addAcceleration(Vector acceleration){
-        double horizontal = this.velocity.getH()+acceleration.getH();
-        double vertical = this.velocity.getV()+acceleration.getV();
-
-        this.velocity.setMagnitude(Math.sqrt(Math.pow(horizontal,2) + Math.pow(vertical, 2)));
-        this.velocity.setAngle(Math.toDegrees(Math.atan2(vertical,horizontal)));
     }
 
     public Shape isColliding(){
@@ -74,17 +61,13 @@ public abstract class Shape {
         return null;
     }
 
-    public double getMass() {
-        return mass;
-    }
-
-    public void setMass(double mass) {
-        this.mass = mass;
-    }
-
     public void update(Double timestep){
         if (!this.isPassive){
-            if (this.hasGravity) this.addAcceleration(GRAVITY);
+            if (this.hasGravity) {
+                Vector localGrav = GRAVITY.clone();
+                localGrav.setMagnitude(GRAVITY.getMagnitude()*Main.step);
+                this.addAcceleration(localGrav);
+            }
             Point delta = new Point(this.velocity.getH()*Main.step,this.velocity.getV()*Main.step);
             this.moveCenter(delta);
 
@@ -95,13 +78,13 @@ public abstract class Shape {
                     CollisionManifold cm1 = this.collide(s);
                     CollisionManifold cm2 = s.collide(this);
                     if (cm1 != null){
-                        double momentumH = this.getVelocity().getH()*this.mass + s.getVelocity().getH()*s.getMass();
-                        double momentumV = this.getVelocity().getV()*this.mass + s.getVelocity().getV()*s.getMass();
+                        double momentumH = this.getMomentum().getH() + s.getMomentum().getH();
+                        double momentumV = this.getMomentum().getV() + s.getMomentum().getV();
                         double angularMomentum = s.getRpm()*s.getMass() + this.getRpm()*this.getMass();
-                        double h2 = (2*this.getMass()*this.getVelocity().getH())/(this.getMass() + s.getMass());
-                        double v2 = (2*this.getMass()*this.getVelocity().getV())/(this.getMass() + s.getMass());
+                        double h2 = (2*this.getMomentum().getH())/(this.getMass() + s.getMass());
+                        double v2 = (2*this.getMomentum().getV())/(this.getMass() + s.getMass());
                         Vector v = new Vector(this.getCenter(), cm1.getPoint());
-                        v.setAngle(v.getAngle()+90*Math.signum(this.getRpm()));
+                        v.setAngle(v.getAngle()-90*Math.signum(this.getRpm()));
                         System.out.println(this.getClass());
                         System.out.println(h2+", "+v2);
                         System.out.println(v.getAngle());
@@ -113,10 +96,10 @@ public abstract class Shape {
                         double v1 = (momentumV - v2*s.getMass())/this.getMass();
                         Vector f2 = new Vector(
                                 Math.toDegrees(Math.atan2(v2,h2)),
-                                Math.sqrt(h2*h2+v2*v2));
+                                Math.sqrt(h2*h2 + v2*v2));
                         Vector f1 = new Vector(
                                 Math.toDegrees(Math.atan2(v1,h1)),
-                                Math.sqrt(h1*h1+v1*v1));
+                                Math.sqrt(h1*h1 + v1*v1));
 
                         Point delta1 = new Point(cm1.getCollNormal().getH()*Main.step,cm1.getCollNormal().getV()*Main.step);
                         Point delta2 = new Point(cm2.getCollNormal().getH()*Main.step,cm2.getCollNormal().getV()*Main.step);
@@ -131,10 +114,48 @@ public abstract class Shape {
                         this.rpm = (angularMomentum - (s.getRpm()*s.getMass()))/this.getMass();
                         maxAng = Math.max(Math.abs(maxAng),Math.abs(this.rpm));
                         System.out.println();
+
+//                        double momentumH = this.getMomentum().getH() + s.getMomentum().getH();
+//                        double momentumV = this.getMomentum().getV() + s.getMomentum().getV();
+//                        double rest = Math.min(this.getRestitution(), s.getRestitution());
+//
+//                        if (s instanceof Circle){
+//                            Vector force = new Vector(cm)
+//                        }
                     }
                 }
             }
         }
+    }
+
+    public double getMass() {
+        return mass;
+    }
+
+    public void setMass(double mass) {
+        this.mass = mass;
+    }
+
+    public Vector getMomentum(){
+        double momentumH = this.getMass() * this.velocity.getH();
+        double momentumV = this.getMass() * this.velocity.getV();
+
+        return new Vector(Math.toDegrees(Math.atan2(momentumV,momentumH)),
+                Math.sqrt(Math.pow(momentumH, 2) + Math.pow(momentumV, 2)));
+    }
+
+    public void addForce(Vector acceleration, double mass){
+        Vector a = acceleration.clone();
+        a.setMagnitude(acceleration.getMagnitude()*(mass/this.getMass()));
+        addAcceleration(a);
+    }
+
+    public void addAcceleration(Vector acceleration){
+        double horizontal = this.velocity.getH()+acceleration.getH();
+        double vertical = this.velocity.getV()+acceleration.getV();
+
+        this.velocity.setMagnitude(Math.sqrt(Math.pow(horizontal,2) + Math.pow(vertical, 2)));
+        this.velocity.setAngle(Math.toDegrees(Math.atan2(vertical,horizontal)));
     }
 
     public void addVelocity(Vector velocity, Point pos){

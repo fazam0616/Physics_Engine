@@ -1,7 +1,5 @@
 package Physics;
 
-import Main.Main;
-import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 
@@ -19,7 +17,7 @@ public class Circle extends Shape {
         return this;
     }
 
-    public Point collide(@NotNull Circle s) {
+    public Point collide(Circle s) {
         Vector v = new Vector(this.center.clone(),s.center.clone()); //Get direction vector
 
         //Get point of collision on this circle
@@ -52,22 +50,26 @@ public class Circle extends Shape {
 
     @Override
     public void paint(Graphics g) {
-        try{
-            g.setColor(new Color((int) (255*Math.abs(this.getRpm()/(Shape.maxAng+500))),0,0));
-        }catch(Exception e){
-            g.setColor(Color.red);
-        }
         Point pos = this.center.mathToScreen();
         pos.setX(pos.getX()-radius);
         pos.setY(pos.getY()-radius);
 
 
+        g.setColor(Color.BLACK);
 
-        g.fillOval((int)pos.getX(),(int)pos.getY(),2*(int)this.radius,2*(int)this.radius);
+        g.drawOval((int)pos.getX(),(int)pos.getY(),2*(int)this.radius,2*(int)this.radius);
+
+        g.setColor(Color.red);
+        g.drawLine((int)(pos.getX()+radius),(int)(pos.getY()+radius),
+                (int)(pos.getX()+radius+radius*Math.cos(Math.toRadians(this.rot))),
+                (int)(pos.getY()+radius+radius*Math.sin(Math.toRadians(this.rot))));
     }
 
     @Override
-    public void rotate(double degrees) {}
+    public void rotate(double degrees) {
+        this.rot += degrees;
+        this.rot = this.rot >= 0 ? this.rot % 360 : 360-(-this.rot % 360);
+    }
 
     public double getRadius() {
         return radius;
